@@ -44,3 +44,34 @@ scrape_configs:
       - 'tasks.docker-exporter'
       type: 'A'
       port: 4999
+    - job_name: "catalogue"
+    static_configs:
+      - targets: ['catalogue']
+     
+  - job_name: 'payment'
+    static_configs:
+      - targets: ['payment']
+
+  - job_name: 'user'
+    static_configs:
+      - targets: ['user']
+
+  - job_name: 'orders'
+    metrics_path: 'metrics'
+    static_configs:
+      - targets: ['orders']
+
+  - job_name: 'cart'
+    metrics_path: 'metrics'
+    static_configs:
+      - targets: ['carts']
+
+  - job_name: 'shipping'
+    metrics_path: 'metrics'
+    static_configs:
+      - targets: ['shipping']
+
+  - job_name: 'queue-master'
+    metrics_path: 'prometheus'
+    static_configs:
+      - targets: ['queue-master']
