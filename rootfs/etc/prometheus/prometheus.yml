@@ -1,6 +1,6 @@
 global:
-  scrape_interval:     30s
-  evaluation_interval: 30s
+  scrape_interval:     5s
+  evaluation_interval: 5s
 
   labels:
     cluster: swarm
@@ -10,11 +10,6 @@ global:
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
     monitor: 'prometheus-swarm'
-
-rule_files:
-  - "alert.rules_nodes"
-  - "alert.rules_tasks"
-  - "alert.rules_service-groups"
 
 scrape_configs:
   - job_name: 'prometheus'
@@ -44,34 +39,61 @@ scrape_configs:
       - 'tasks.docker-exporter'
       type: 'A'
       port: 4999
-    - job_name: "catalogue"
-    static_configs:
-      - targets: ['catalogue']
      
-  - job_name: 'payment'
-    static_configs:
-      - targets: ['payment']
-
   - job_name: 'user'
-    static_configs:
-      - targets: ['user']
+    dns_sd_configs:
+    - names:
+      - 'tasks.user'
+      type: 'A'
+      port: 80
 
+  - job_name: 'front-end'
+    dns_sd_configs:
+    - names:
+      - 'tasks.front-end'
+      type: 'A'
+      port: 80
+  
+  - job_name: 'catalogue'
+    dns_sd_configs:
+    - names:
+      - 'tasks.catalogue'
+      type: 'A'
+      port: 80
+  
+  - job_name: 'payment'
+    dns_sd_configs:
+    - names:
+      - 'tasks.payment'
+      type: 'A'
+      port: 80
+  
+  - job_name: 'carts'
+    dns_sd_configs:
+    - names:
+      - 'tasks.carts'
+      type: 'A'
+      port: 80
+      
   - job_name: 'orders'
-    metrics_path: 'metrics'
-    static_configs:
-      - targets: ['orders']
-
-  - job_name: 'cart'
-    metrics_path: 'metrics'
-    static_configs:
-      - targets: ['carts']
-
+    dns_sd_configs:
+    - names:
+      - 'tasks.orders'
+      type: 'A'
+      port: 80
+  
   - job_name: 'shipping'
-    metrics_path: 'metrics'
-    static_configs:
-      - targets: ['shipping']
+    dns_sd_configs:
+    - names:
+      - 'tasks.shipping'
+      type: 'A'
+      port: 80
 
   - job_name: 'queue-master'
     metrics_path: 'prometheus'
-    static_configs:
-      - targets: ['queue-master']
+    dns_sd_configs:
+    - names:
+      - 'tasks.queue-master'
+      type: 'A'
+      port: 80
+    
